@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+//Дано: Одновимірний масив. Всі його елементи, що не дорівнюють  нулю, переписати у початок масиву,
+// не порушуючи порядку. Нульові  – в кінець масиву. Новий масив не створювати.
+
+int main(void) {
+    int i, k, m;
+    int arr[15] = {0, 1, 0, 0, 20, 40, 4, 0, 3, 2, 0, 8, 0, 0, 1};
+    k = 0;
+    printf("Original array:\n");
+    for (i = 0; i < 15; i++) {
+        printf("%d", arr[i]);
+        printf(" ");
+    }
+    for (i = 0; i < 15; i++) {
+        if (arr[i] != 0) {
+            m = arr[i];
+            arr[i] = 0;
+            arr[k] = m;
+            k++;
+
+
+        }
+    }
+    printf("\nResult array:\n");
+    for (i = 0; i < 15; i++) {
+        printf("%d", arr[i]);
+        printf(" ");
+    }
+
+    return 0;
+}
