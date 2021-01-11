@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+//Дано: є дійсна квадратна матриця порядку N, усі елементи якої різні.
+// Знайти  максимальні елементи на головній та на побічній діагоналі та  поміняти їх місцями.
+
+
+int main(void) {
+    int max_main_ij,  max_side_i, max_side_j, n = 3;
+    double arr[3][3] = {{0, 7,  4},
+                        {9, 21, -1},
+                        {5, -5, 66}};
+    double max_main = -9999, max_side = -9999;
+    printf("Original matrix:\n");
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%.2f ", arr[i][j]);
+        }
+        printf("\n");
+    }
+
+    //пошук максимальних елементів на головній і побічній діагоналях
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i == j) {
+                if (arr[i][j] > max_main) {
+                    max_main = arr[i][j];
+                    max_main_ij = i;
+                }
+            }
+            if (i + j == n - 1) {
+                if (arr[i][j] > max_side) {
+                    max_side = arr[i][j];
+                    max_side_i = i;
+                    max_side_j = j;
+                }
+            }
+        }
+    }
+
+    //заміна максимальних елементів місцями
+    arr[max_main_ij][max_main_ij]=max_side;
+    arr[max_side_i][max_side_j]=max_main;
+
+
+    printf("\nmax main %.2f\n",max_main);
+    printf("max side %.2f\n",max_side);
+    printf("\nResult matrix:\n");
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%.2f ", arr[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
