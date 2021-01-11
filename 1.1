@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+//Дано: натуральне число n, символи S1,...,Sn. Обчислити найбільшу кількість символів пробілу, що йдуть підряд.
+
+int main(void) {
+    int N, i, max, counter;
+    max = 0;
+    counter = 0;
+    char arr[100] = {0};
+    printf("Enter the number of symbols to check:\n");
+    scanf("%d", &N);
+    printf("Enter the string to check:\n");
+    for (i = 0; i < N; i++) {
+        scanf("%c", &arr[i]);
+
+    }
+
+    for (i = 0; i < N; i++) {
+        if (arr[i] == 32) {
+            counter++;
+            if (counter > max) {
+                max = counter;
+            }
+
+        } else {
+            counter = 0;
+        }
+    }
+
+    printf("Maximum count of spaces in raw: %d", max);
+
+    return 0;
+}
