@@ -1,0 +1,207 @@
+#include <stdio.h>
+#include <accctrl.h>
+
+//Для однозв’язного списку точок в R3 реалізувати функції:
+//а) додавання елемента у хвіст списку;
+//б) видалення елемента з голови списку;
+//в) поміняти місцями максимальний та елемент в голові списку;
+//г) надрукувати весь список, формат: “(x, y, z)”;
+//д) видалити весь список.
+
+typedef struct node {
+    double x;
+    double y;
+    double z;
+    struct node *next;
+} node_t;
+
+void addToEnd(node_t *, double, double, double);
+
+double deleteFromBeginning(node_t **);
+
+double swapMaxAndHead(node_t **, int);
+
+int sizeOfList(node_t **);
+
+int printList(node_t **);
+
+double deleteList(node_t **);
+
+int main(void) {
+    node_t *head = NULL;
+    head = (node_t *) malloc(sizeof(node_t));
+    if (head == NULL) {
+        return 1;
+    }
+
+    head->x = 1;
+    head->y = 1;
+    head->z = 1;
+    head->next = NULL;
+    printList(&head);
+    addToEnd(head, 2, 2, 2);
+    addToEnd(head, 3, 3, 3);
+    printList(&head);
+    deleteFromBeginning(&head);
+    printList(&head);
+    addToEnd(head, 4, 4, 4);
+    printList(&head);
+    int size = sizeOfList(&head);
+    swapMaxAndHead(&head, size);
+    printList(&head);
+    deleteList(&head);
+    printList(&head);
+
+    return 0;
+}
+
+//а) додавання елемента у хвіст списку
+
+void addToEnd(node_t *head, double x, double y, double z) {
+    node_t *current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    //додавання наступного елемента
+    current->next = (node_t *) malloc(sizeof(node_t));
+    current->next->x = x;
+    current->next->y = y;
+    current->next->z = z;
+    current->next->next = NULL;
+    printf("(%.2f, %.2f, %.2f) added to the end of the list\n", x, y, z);
+}
+
+//б) видалення елемента з голови списку
+
+double deleteFromBeginning(node_t **head) {
+    int retval = -1;
+    node_t *next_node = NULL;
+
+    if (*head == NULL) {
+        return -1;
+    }
+
+    next_node = (*head)->next;
+    retval = (*head)->x;
+    printf("(%.2f, %.2f, %.2f) deleted from the head of the list\n", (*head)->x, (*head)->y, (*head)->z);
+
+    free(*head);
+    *head = next_node;
+
+    return retval;
+}
+
+//в) поміняти місцями максимальний та елемент в голові списку
+
+double swapMaxAndHead(node_t **head, int n) {
+    double max = -9999;
+    double sum;
+    int indexMax = 0;
+    int i = 0;
+    double retval = -1;
+    node_t *current = *head;
+    node_t *maxnode = NULL;
+    node_t *temp_node = NULL;
+
+    for (i = 0; i < n; i++) {
+        sum = current->x + current->y + current->z;
+        if (sum > max) {
+            max = sum;
+            indexMax = i;
+            maxnode = current;
+        }
+        current = current->next;
+    }
+
+    printf("\nMax sum is %.2f index %d\n", max, indexMax);
+    current = *head;
+
+    for (i = 0; i < n; i++) {
+
+        if (i == indexMax - 1) {
+            current->next = *head;
+            break;
+
+        }
+        current = current->next;
+    }
+    current = *head;
+    temp_node = maxnode->next;
+    maxnode->next = current->next;
+    current->next = temp_node;
+
+    printf("Head is swapped with element %d\n", indexMax);
+    *head = maxnode;
+    return retval;
+
+}
+
+//допоміжний метод для визначення розміру однозв'язного списку
+
+int sizeOfList(node_t **head) {
+    int counter = 1;
+    node_t *current = *head;
+
+    while (current->next != NULL) {
+        counter++;
+        current = current->next;
+    }
+
+    printf("\nsize %d\n", counter);
+    return counter;
+
+}
+
+//г) надрукувати весь список, формат: “(x, y, z)”
+
+int printList(node_t **head) {
+
+    if (*head == NULL) {
+        printf("\nThe list is empty\n");
+        return -1;
+    }
+
+    printf("\nLinked list (x,y,z):\n {");
+    node_t *current = *head;
+
+    while (current->next != NULL) {
+        printf("(%.2f, %.2f, %.2f),", current->x, current->y, current->z);
+        current = current->next;
+    }
+    printf("(%.2f, %.2f, %.2f)}\n", current->x, current->y, current->z);
+
+    current = *head;
+
+    return 0;
+
+}
+
+//д) видалити весь список
+
+double deleteList(node_t **head) {
+    int retval = -1;
+    node_t *next_node = NULL;
+    node_t *current = *head;
+
+    if (*head == NULL) {
+        return -1;
+    }
+
+    while (current->next != NULL) {
+        next_node = (*head)->next;
+        retval = current->x;
+        free(current);
+        *head = next_node;
+        current = current->next;
+    }
+
+    next_node = (*head)->next;
+    retval = current->x;
+    free(current);
+    *head = next_node;
+
+    printf("The list was successfully deleted\n");
+
+    return retval;
+}
